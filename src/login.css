@@ -1,0 +1,133 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'poppins',sans-serif;
+}
+
+body {
+    background-color: #f5f9ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.login-container {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 72, 180, 0.1);
+    height: 500px;
+    width: 500px;
+
+    padding: 40px 35px; 
+    text-align: center;
+}
+
+.form-title {
+    color: #007BFF;
+    margin-bottom: 28px; 
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.social-login {
+    display: flex;
+    flex-direction: column;
+    gap: 14px; 
+    margin-bottom: 22px; 
+}
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px; 
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 14px; 
+}
+
+.input-wrapper input {
+    padding: 13px 15px; 
+    border: 1px solid #e0e7ff;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background-color: #f8faff;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input-wrapper input::placeholder {
+    color: #94a3b8;
+}
+
+.forgot-pass-link {
+    text-align: right;
+    color: #3b82f6;
+    font-size: 13px; 
+    text-decoration: none;
+    margin-top: -8px; 
+    transition: color 0.2s ease;
+}
+
+.forgot-pass-link:hover {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.login-button {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 13px; 
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 8px;
+}
+
+.login-button:hover {
+    background-color: #1d4ed8;
+}
+
+.signup-text {
+    margin-top: 22px; 
+    color: #64748b;
+    font-size: 13px; 
+}
+
+.signup-text a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+.signup-text a:hover {
+    color: #1d4ed8;
+    text-decoration: none;
+}
+
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 30px 20px;
+        max-width: 340px;
+    }
+    
+    .form-title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+}
