@@ -1,18 +1,23 @@
 import React from "react";
 import "./homepage.css";
+import {Link} from 'react-router-dom';
+
+
 
 function Homepage() {
     return (
         <>
             <nav>
                 <h1>MediHub System Rwanda</h1>
-                <a href="/home">Home<span></span></a>
-                <a href="/home">About Us<span></span></a>
-                <a href="/home">Services<span></span></a>
-                <a href="/home">How it Works <span></span></a>
-                <a href="/home">Contacts<span></span></a>
-                <a href="register">Register<span></span></a>
-                <a href="login">Login<span></span></a>
+                
+                <Link to={"/home"} class="link" >Home</Link><span></span>
+                 <Link to={"/home"} class="link" >About Us</Link><span></span>
+                 <Link to={"/home"} class="link" >Services</Link><span></span>
+                <Link to={"/home"} class="link" >How it Works</Link><span></span>
+                 <Link to={"home"} class="link" >contact</Link><span></span>
+                <Link to={"/register"} class="link" >Register</Link><span></span>
+                 <Link to={"/login"} class="link" >Login</Link><span></span>
+            
             </nav>
 
             <div className="welcomingpage">
@@ -20,7 +25,7 @@ function Homepage() {
                     <p className="wellocome">
                         Access your medical services online anytime, anywhere
                     </p>
-                    <a href="register">Register<span></span></a>
+                <Link to={"/debreak"} class="link" >Visit Here</Link><span></span>
                 </section>
                 <br /><br />
             </div>
@@ -260,8 +265,8 @@ function Homepage() {
                             <a href="https://wa.me/250795130378" target="_blank" rel="noopener noreferrer">
                                 <span className="social-icon whatsapp">WhatsApp</span> 0795 130 378
                             </a>
-                            <a href="https://instagram.com/medihub_rwanda" target="_blank" rel="noopener noreferrer">
-                                <span className="social-icon instagram">Instagram</span> @medihub_rwanda
+                            <a href="https://instagram.com/nathan._.32" target="_blank" rel="noopener noreferrer">
+                                <span className="social-icon instagram">Instagram</span>nathan
                             </a>
                             <a href="https://twitter.com/medihub_rwanda" target="_blank" rel="noopener noreferrer">
                                 <span className="social-icon twitter">Twitter</span> @medihub_rwanda

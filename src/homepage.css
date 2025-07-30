@@ -30,12 +30,12 @@ nav h1 {
     font-weight: 600;
 }
 
-.nav-links {
+/* .nav- {
     display: flex;
     gap: 30px;
-}
+} */
 
-nav a {
+.link  {
     position: relative;
     font-size: 1.1em;
     font-weight: 500;
@@ -46,11 +46,11 @@ nav a {
     z-index: 1;
 }
 
-nav a:hover {
+.link:hover {
     color: #0ef;
 }
 
-nav a span {
+.link span {
     position: absolute;
     top: 0;
     left: 0;
@@ -64,7 +64,7 @@ nav a span {
     z-index: 0;
 }
 
-nav a:hover span {
+.link:hover span {
     transform: scale(1) translateY(0);
     opacity: 1;
 }
