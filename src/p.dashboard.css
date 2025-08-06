@@ -1,17 +1,166 @@
-*{
+* {
     margin: 0;
     padding: 0;
-    font-family: 'poppins',sans-serif;
+    font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
 }
-/* body{
-    background-color: skyblue;
+
+body {
+    background-color: #f8fafc;
+}
+
+/* .menu-icon {
+    font-size: 24px;
+    cursor: pointer;
+    padding: 12px 15px;
+    margin: 15px;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 8px;
+    width: fit-content;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 } */
-h1{
+
+.menu-icon:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.05);
+}
+
+.sidebar-fordata {
+    display: grid;
+    padding: 20px 15px;
+    width: 240px;
+    height: 100vh;
+    background-color: #2563eb;
+    border-radius: 0 10px 10px 0;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+    margin-top: 0;
+    margin-left: 0;
+}
+
+.sidebar {
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    margin-bottom: 8px;
+    padding: 12px 15px;
+    background-color: #2563eb;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    font-weight: 500;
     display: flex;
-    font-size: xx-large;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-    color:skyblue;
+    border-left: 4px solid transparent;
+}
+
+.sidebar:hover {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border-left: 4px solid #2563eb;
+}
+
+/* .profile {
+    margin-left: 260px;
+    padding: 20px;
+    transition: all 0.3s ease;
+} */
+s hidden */
+.sidebar-hidden .sidebar-fordata {
+    transform: translateX(-100%);
+}
+
+.sidebar-hidden .profile {
+    margin-left: 20px;
+}
+
+
+.sidebar.active {
+    background-color: #dbeafe;
+    color: #2563eb;
+    border-left: 4px solid #2563eb;
+    font-weight: 600;
+}
+.navbar{
+    background-color: #dbeafe;
+    width: 1400px;
+    height: 80px;
+    position: fixed;
+   left: -0px;
+   margin-top: -140px;
+   
+
+}
+
+.cards-container{
+    display: grid;
+    padding: 20px 0;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+}
+
+.small-sections  {
+    width: 100%;
+    min-height: 200px;
+     box-shadow:  0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background-color: whitesmoke;
+    padding: 25px;
+   display: flex;
+   transition: all 0.3s ease;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+   cursor: pointer;
+   overflow: hidden;
+   position: relative;
+}
+.small-sections:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+.apointments{
+    border-top: 4px solid #3b82f6;
+}
+.lab-results{
+    border-top: 4px solid #10b981;
+}
+.small-sections h1{
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #1e293b;
+}
+.small-sections p {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+.small-sections p.count {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 10px;
+}
+.apointments::before {
+  content: "📅";
+  font-size: 2rem;
+  opacity: 0.1;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+.lab-results::before {
+  content: "🧪";
+  font-size: 2rem;
+  opacity: 0.1;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 }

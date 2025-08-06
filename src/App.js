@@ -4,6 +4,7 @@ import Hello from "./devbreak";
 import Homepage from "./homepage";
 import Login from "./login";
 import PatientDashboard from "./patientdashboard";
+import GoToAnother from "./go-as";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="login" element={<Login/>} />
           <Route path="/patient" element={< PatientDashboard/>}/>
+          <Route path="/continue-as" element={<GoToAnother/>}/>
         </Routes>
       </BrowserRouter>
     </>
