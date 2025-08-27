@@ -11,24 +11,28 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    axios
-      .post("http://localhost:2000/login", values)
-      .then((res) => {
-        console.log(res.data);
-        alert(res.data.message); // Optional: show message
-        navigate("/patient");
-      })
-      .catch((err) => {
-        if (err.response && err.response.status === 401) {
-          alert("Invalid email or password.");
-        } else {
-          alert("Login failed. Please try again.");
-        }
-        console.log(err);
-      });
+    try {
+      const res = await axios.post("http://localhost:2000/login", values);
+      console.log(res.data); // Debug: see backend response
+
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        alert("Login successful");
+        navigate("/patient"); // Make sure /dashboard route exists
+      }
+      
+    } catch (err) {
+      console.error(err);
+      if (err.response) {
+        alert(err.response.data.message || "Login failed");
+      } else {
+        alert("Network error. Please try again.");
+      }
+    }
   };
 
   return (

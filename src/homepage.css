@@ -26,8 +26,9 @@ nav {
 
 nav h1 {
     color: #fff;
-    font-size: 1.8em;
+    font-size: 1.3em;
     font-weight: 600;
+    margin-top: 15px;
 }
 
 /* .nav- {
@@ -480,6 +481,7 @@ nav h1 {
 .contact-hero p {
     font-size: 1.2rem;
     opacity: 0.9;
+    color: #1d4ed8;
 }
 
 .contact-container {

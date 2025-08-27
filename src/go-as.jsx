@@ -29,7 +29,10 @@ function GoToAnother(){
 
 
           </div>
+                <div className="back-to-home">   <Link to ={"/"} class="send">Back To Home </Link></div>
+        
        
+
           </div>
         
         </>

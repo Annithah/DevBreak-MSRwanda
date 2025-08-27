@@ -5,6 +5,8 @@ import Homepage from "./homepage";
 import Login from "./login";
 import PatientDashboard from "./patientdashboard";
 import GoToAnother from "./go-as";
+import MakeAppointment from './appointments';
+import DoctorDashboard from './doctor.dash';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
           <Route path="login" element={<Login/>} />
           <Route path="/patient" element={< PatientDashboard/>}/>
           <Route path="/continue-as" element={<GoToAnother/>}/>
+          <Route path="/appointment" element={<MakeAppointment/>}/>
+          <Route path="/doctor" element={<DoctorDashboard/>}/>
         </Routes>
       </BrowserRouter>
     </>
