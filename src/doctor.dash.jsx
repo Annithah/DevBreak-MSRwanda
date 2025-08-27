@@ -148,7 +148,7 @@ const DoctorDashboard = () => {
       <div className="sidebar">
         <div className="logo">
           <i className="fas fa-hospital-user fa-2x"></i>
-          <h1>Doctor Dashboard</h1>
+          <h1>MedHub Doctor Dashboard</h1>
         </div>
         
         <div className="menu-item active">
