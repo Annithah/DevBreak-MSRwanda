@@ -4,7 +4,7 @@ import './doctor.dash.css';
 const DoctorDashboard = () => {
   const [currentPatient, setCurrentPatient] = useState(null);
   const [appointments, setAppointments] = useState([]);
-  const [ehrData, setEhrData] = useState(null);
+
   const [tasks, setTasks] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [activeTab, setActiveTab] = useState('overview');
