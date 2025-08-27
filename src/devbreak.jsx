@@ -45,7 +45,17 @@ function Hello() {
     <div className="container">
       <h1>Register In MedHub System</h1>
       <form onSubmit={handleSubmit} className="form-grid">
-        {/* ... keep your form fields as before ... */}
+        <input type="text" name="firstname" placeholder="First Name" onChange={handleChanges} required />
+        <input type="text" name="lastname" placeholder="Last Name" onChange={handleChanges} required />
+        <input type="email" name="email" placeholder="Email" onChange={handleChanges} required />
+        <input type="password" name="password" placeholder="Password" onChange={handleChanges} required />
+        <input type="date" name="dateofbirth" onChange={handleChanges} required />
+        <input type="text" name="phonenumber" placeholder="Phone Number" onChange={handleChanges} required />
+        <select name="gender" onChange={handleChanges} required>
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
         <div className="form-column">
           <button type="submit" id="register">
             Register
