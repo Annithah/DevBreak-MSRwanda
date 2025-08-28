@@ -20,10 +20,10 @@ function GoToAnother(){
         </div> */}
           <div className="continue-as">
              <ul>
-            <li> <Link to={"/"} class="links">Admin</Link></li>
-            <li><Link to={"/"} class="links">Doctor</Link></li>
+            <li> <Link to={"/admin/login"} class="links">Admin</Link></li>
+            <li><Link to={"/login"} class="links">Doctor</Link></li>
             <li><Link to={"/login"} class="links">Patient</Link> </li>
-            <li><Link to={"/"} class="links">Pharmacy</Link></li>
+            <li><Link to={"/login"} class="links">Pharmacy</Link></li>
         </ul>
 
 
