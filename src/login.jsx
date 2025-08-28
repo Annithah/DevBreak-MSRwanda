@@ -16,15 +16,24 @@ function Login() {
 
     try {
       const res = await axios.post("http://localhost:2000/login", values);
-      console.log(res.data); // Debug: see backend response
+      console.log(res.data); // ✅ Backend response
 
       if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        alert("Login successful");
-        navigate("/patient"); // Make sure /dashboard route exists
+        const user = res.data.user;
+
+        // ✅ Check user role and redirect
+        if (user.role && user.role.trim().toLowerCase() === "patient") {
+          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("user", JSON.stringify(user));
+
+          const fullName = `${user.firstname} ${user.lastname}`;
+          navigate("/patient", {
+            state: { email: user.email, id: user.id, fullName },
+          });
+        } else {
+          alert("Access denied: Not a patient.");
+        }
       }
-      
     } catch (err) {
       console.error(err);
       if (err.response) {
@@ -45,7 +54,9 @@ function Login() {
               type="email"
               name="email"
               value={values.email}
-              onChange={(e) => setValues({ ...values, email: e.target.value })}
+              onChange={(e) =>
+                setValues({ ...values, email: e.target.value })
+              }
               placeholder="Email"
               required
             />
