@@ -31,7 +31,7 @@ function Hello() {
     axios
       .post("http://localhost:2000/register", values)
       .then((res) => {
-        console.log(res.data); // Debug: see backend response
+        console.log(res.data);
         alert(res.data.message || "Registration successful");
         navigate("/login");
       })
@@ -50,12 +50,18 @@ function Hello() {
         <input type="email" name="email" placeholder="Email" onChange={handleChanges} required />
         <input type="password" name="password" placeholder="Password" onChange={handleChanges} required />
         <input type="date" name="dateofbirth" onChange={handleChanges} required />
+        <input type="text" name="identificationumber" placeholder="ID Number" onChange={handleChanges} required />
+        <input type="text" name="nationality" placeholder="Nationality" onChange={handleChanges} required />
+        <input type="text" name="bloodgroup" placeholder="Blood Group" onChange={handleChanges} required />
+        <input type="number" name="weight" placeholder="Weight (kg)" onChange={handleChanges} required />
         <input type="text" name="phonenumber" placeholder="Phone Number" onChange={handleChanges} required />
         <select name="gender" onChange={handleChanges} required>
           <option value="">Select Gender</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select>
+        <input type="text" name="healthinsurancetype" placeholder="Health Insurance Type" onChange={handleChanges} required />
+        <textarea name="messageofsysmptoms" placeholder="Describe your symptoms" onChange={handleChanges} required></textarea>
         <div className="form-column">
           <button type="submit" id="register">
             Register
