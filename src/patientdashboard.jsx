@@ -11,107 +11,113 @@ const PatientDashboard = () => {
   const [appointmentTime, setAppointmentTime] = useState("");
   const [reason, setReason] = useState("");
   const [appointments, setAppointments] = useState([]);
+  const [patientData, setPatientData] = useState(null);
 
-  // Sample data - in a real app, this would come from an API
-  const patientData = {
-    name: "Sarah Johnson",
-    upcomingAppointments: 5,
-    activePrescriptions: 3,
-    pendingLabResults: 2,
-    medicalRecords: 12,
-  };
-
-  // Fetch doctors and appointments from backend
   useEffect(() => {
-    // In a real app, these would be API calls
-    const fetchData = async () => {
-      try {
-        // Simulate API calls
-        const doctorsResponse = await fetch('/api/doctors');
-        const doctorsData = await doctorsResponse.json();
-        setDoctors(doctorsData);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      fetch(`http://localhost:2000/api/patient/${user.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setPatientData({
+            name: `${data.firstname} ${data.lastname}`,
+            upcomingAppointments: 5, // You can replace with real values if needed
+            activePrescriptions: 3,
+            pendingLabResults: 2,
+            medicalRecords: 12,
+          });
+        })
+        .catch((err) => {
+          console.error("Failed to fetch patient data:", err);
+        });
+    }
+  }, []);
 
-        const appointmentsResponse = await fetch('/api/appointments');
-        const appointmentsData = await appointmentsResponse.json();
-        setAppointments(appointmentsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Fallback data
-        setDoctors([
-          { id: 1, name: "Dr. Michael Chen", department: "Cardiology" },
-          { id: 2, name: "Dr. Emily Rodriguez", department: "Dermatology" },
-          { id: 3, name: "Dr. James Wilson", department: "Orthopedics" },
-          { id: 4, name: "Dr. Sarah Thompson", department: "Neurology" },
-        ]);
-        setAppointments([
-          {
-            id: 1,
-            doctor: "Dr. Michael Chen",
-            date: "Jun 25, 2023 - 10:30 AM",
-            department: "Cardiology",
-            status: "Confirmed",
-            image: "https://randomuser.me/api/portraits/men/32.jpg",
-          },
-          {
-            id: 2,
-            doctor: "Dr. Emily Rodriguez",
-            date: "Jun 28, 2023 - 2:15 PM",
-            department: "Dermatology",
-            status: "Pending",
-            image: "https://randomuser.me/api/portraits/women/65.jpg",
-          },
-          {
-            id: 3,
-            doctor: "Dr. James Wilson",
-            date: "Jul 02, 2023 - 9:00 AM",
-            department: "Orthopedics",
-            status: "Confirmed",
-            image: "https://randomuser.me/api/portraits/men/75.jpg",
-          },
-          {
-            id: 4,
-            doctor: "Dr. Sarah Thompson",
-            date: "Jul 05, 2023 - 11:45 AM",
-            department: "Neurology",
-            status: "Cancelled",
-            image: "https://randomuser.me/api/portraits/women/32.jpg",
-          },
-        ]);
-      }
-    };
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      fetch(`http://localhost:2000/api/patient/${user.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setPatientData({
+            name: `${data.firstname} ${data.lastname}`,
+            upcomingAppointments: data.upcomingAppointments,
+            activePrescriptions: data.activePrescriptions,
+            pendingLabResults: data.pendingLabResults,
+            medicalRecords: data.medicalRecords,
+          });
+        })
+        .catch((err) => console.error("Failed to fetch patient data:", err));
+    }
+  }, []);
 
-    fetchData();
+  const user = JSON.parse(localStorage.getItem("user")); // Assuming user is logged in
+
+  useEffect(() => {
+    if (user?.id) {
+      fetch(`http://localhost:2000/api/appointments?patientId=${user.id}`)
+        .then((res) => res.json())
+        .then((data) => setAppointments(data))
+        .catch((err) => console.error("Failed to fetch appointments:", err));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    fetch("http://localhost:2000/api/doctors")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setDoctors(data);
+        } else {
+          console.error("Doctors response is not an array", data);
+          setDoctors([]); // to avoid `.map is not a function` errors
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching doctors:", err);
+        setDoctors([]);
+      });
   }, []);
 
   const handleBookAppointment = async (e) => {
     e.preventDefault();
-    
+
+    if (!user || !user.id) {
+      console.error("User not logged in.");
+      return;
+    }
+
+    const newAppointment = {
+      doctorId: selectedDoctor,
+      date: appointmentDate,
+      time: appointmentTime,
+      reason,
+    };
+
     try {
-      const response = await fetch('/api/appointments', {
-        method: 'POST',
+      const res = await fetch("http://localhost:2000/api/appointments", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          "x-user": JSON.stringify({ id: user.id }),
         },
-        body: JSON.stringify({
-          doctorId: selectedDoctor,
-          date: appointmentDate,
-          time: appointmentTime,
-          reason: reason,
-        }),
+        body: JSON.stringify(newAppointment),
       });
 
-      if (response.ok) {
-        const newAppointment = await response.json();
-        setAppointments([...appointments, newAppointment]);
-        setShowAppointmentModal(false);
-        resetForm();
-        alert('Appointment booked successfully!');
-      } else {
-        alert('Failed to book appointment. Please try again.');
+      if (!res.ok) {
+        const error = await res.json();
+        console.error("Booking failed:", error);
+        return;
       }
-    } catch (error) {
-      console.error('Error booking appointment:', error);
-      alert('An error occurred. Please try again.');
+
+      const result = await res.json();
+      setAppointments((prev) => [result, ...prev]); // Add new appointment
+      resetForm();
+      setShowAppointmentModal(false);
+    } catch (err) {
+      console.error("Error booking appointment:", err);
     }
   };
 
@@ -122,9 +128,38 @@ const PatientDashboard = () => {
     setReason("");
   };
 
+  const handleCancelAppointment = async (id) => {
+    try {
+      const res = await fetch(
+        `http://localhost:2000/api/appointments/${id}/cancel`,
+        {
+          method: "PATCH",
+        }
+      );
+
+      if (!res.ok) {
+        const err = await res.json();
+        console.error("Cancel failed:", err);
+        return;
+      }
+
+      // Update appointment status in state
+      setAppointments((prev) =>
+        prev.map((app) =>
+          app.id === id ? { ...app, status: "Cancelled" } : app
+        )
+      );
+    } catch (err) {
+      console.error("Error cancelling appointment:", err);
+    }
+  };
+
   const renderContent = () => {
-    switch(activeTab) {
+    switch (activeTab) {
       case "dashboard":
+        if (!patientData) {
+          return <div>Loading...</div>;
+        }
         return (
           <>
             {/* Stats Cards */}
@@ -156,7 +191,9 @@ const PatientDashboard = () => {
                   <div className="card-icon orange">
                     <i className="fas fa-flask"></i>
                   </div>
-                  <div className="stat-number">{patientData.pendingLabResults}</div>
+                  <div className="stat-number">
+                    {patientData.pendingLabResults}
+                  </div>
                   <div className="stat-title">Pending Lab Results</div>
                 </div>
               </div>
@@ -165,7 +202,9 @@ const PatientDashboard = () => {
                   <div className="card-icon red">
                     <i className="fas fa-file-medical"></i>
                   </div>
-                  <div className="stat-number">{patientData.medicalRecords}</div>
+                  <div className="stat-number">
+                    {patientData.medicalRecords}
+                  </div>
                   <div className="stat-title">Medical Records</div>
                 </div>
               </div>
@@ -177,7 +216,7 @@ const PatientDashboard = () => {
                 <div className="appointment-table">
                   <div className="d-flex justify-content-between align-items-center mb-4">
                     <h5>Recent Appointments</h5>
-                    <button 
+                    <button
                       className="btn btn-sm btn-outline-primary"
                       onClick={() => setActiveTab("appointments")}
                     >
@@ -194,13 +233,18 @@ const PatientDashboard = () => {
                           <th>Status</th>
                         </tr>
                       </thead>
+                      {/* Inside "dashboard" case in renderContent */}
+
                       <tbody>
-                        {appointments.slice(0, 3).map((appointment) => (
+                        {(Array.isArray(appointments)
+                          ? appointments.slice(0, 5)
+                          : []
+                        ).map((appointment) => (
                           <tr key={appointment.id}>
                             <td>
                               <div className="d-flex align-items-center">
                                 <img
-                                  src={appointment.image}
+                                  src={appointment.image_url}
                                   alt="Doctor"
                                   width="35"
                                   height="35"
@@ -210,7 +254,7 @@ const PatientDashboard = () => {
                               </div>
                             </td>
                             <td>{appointment.date}</td>
-                            <td>{appointment.department}</td>
+                            <td>{appointment.specialization}</td>
                             <td>
                               <span
                                 className={`status-badge status-${appointment.status.toLowerCase()}`}
@@ -236,7 +280,8 @@ const PatientDashboard = () => {
                 <div className="chart-container">
                   <h5 className="mb-4">Medication Schedule</h5>
                   <div className="chart-placeholder">
-                    <i className="fas fa-pills me-2"></i> Medication Schedule Chart
+                    <i className="fas fa-pills me-2"></i> Medication Schedule
+                    Chart
                   </div>
                 </div>
               </div>
@@ -248,7 +293,7 @@ const PatientDashboard = () => {
           <div className="appointment-table">
             <div className="d-flex justify-content-between align-items-center mb-4">
               <h5>My Appointments</h5>
-              <button 
+              <button
                 className="btn btn-primary"
                 onClick={() => setShowAppointmentModal(true)}
               >
@@ -267,38 +312,45 @@ const PatientDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {appointments.map((appointment) => (
-                    <tr key={appointment.id}>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <img
-                            src={appointment.image}
-                            alt="Doctor"
-                            width="35"
-                            height="35"
-                            className="rounded-circle me-2"
-                          />
-                          <div>{appointment.doctor}</div>
-                        </div>
-                      </td>
-                      <td>{appointment.date}</td>
-                      <td>{appointment.department}</td>
-                      <td>
-                        <span
-                          className={`status-badge status-${appointment.status.toLowerCase()}`}
-                        >
-                          {appointment.status}
-                        </span>
-                      </td>
-                      <td>
-                        {appointment.status === "Pending" && (
-                          <button className="btn btn-sm btn-outline-danger">
-                            Cancel
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                  {(Array.isArray(appointments) ? appointments : []).map(
+                    (appointment) => (
+                      <tr key={appointment.id}>
+                        <td>
+                          <div className="d-flex align-items-center">
+                            <img
+                              src={appointment.image_url}
+                              alt="Doctor"
+                              width="35"
+                              height="35"
+                              className="rounded-circle me-2"
+                            />
+                            <div>{appointment.doctor}</div>
+                          </div>
+                        </td>
+                        <td>{appointment.date}</td>
+                        <td>{appointment.specialization}</td>
+                        <td>
+                          <span
+                            className={`status-badge status-${appointment.status.toLowerCase()}`}
+                          >
+                            {appointment.status}
+                          </span>
+                        </td>
+                        <td>
+                          {appointment.status === "Pending" && (
+                            <button
+                              className="btn btn-sm btn-outline-danger"
+                              onClick={() =>
+                                handleCancelAppointment(appointment.id)
+                              }
+                            >
+                              Cancel
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>
@@ -452,7 +504,10 @@ const PatientDashboard = () => {
               alt="User Profile"
             />
             <div className="user-info">
-              <span className="d-block">{patientData.name}</span>
+              <span className="d-block">
+                {patientData ? patientData.name : "Loading..."}
+              </span>
+
               <small className="text-muted">Patient</small>
             </div>
           </div>
@@ -468,8 +523,8 @@ const PatientDashboard = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Book New Appointment</h5>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="btn-close"
                 onClick={() => setShowAppointmentModal(false)}
               ></button>
@@ -477,8 +532,10 @@ const PatientDashboard = () => {
             <div className="modal-body">
               <form onSubmit={handleBookAppointment}>
                 <div className="mb-3">
-                  <label htmlFor="doctor" className="form-label">Select Doctor</label>
-                  <select 
+                  <label htmlFor="doctor" className="form-label">
+                    Select Doctor
+                  </label>
+                  <select
                     className="form-select"
                     id="doctor"
                     value={selectedDoctor}
@@ -486,17 +543,20 @@ const PatientDashboard = () => {
                     required
                   >
                     <option value="">Choose a doctor</option>
-                    {doctors.map(doctor => (
-                      <option key={doctor.id} value={doctor.id}>
-                        {doctor.name} - {doctor.department}
-                      </option>
-                    ))}
+                    {Array.isArray(doctors) &&
+                      doctors.map((doctor) => (
+                        <option key={doctor.id} value={doctor.id}>
+                          {doctor.name} - {doctor.specialization}
+                        </option>
+                      ))}
                   </select>
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="date" className="form-label">Date</label>
-                  <input 
-                    type="date" 
+                  <label htmlFor="date" className="form-label">
+                    Date
+                  </label>
+                  <input
+                    type="date"
                     className="form-control"
                     id="date"
                     value={appointmentDate}
@@ -505,9 +565,11 @@ const PatientDashboard = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="time" className="form-label">Time</label>
-                  <input 
-                    type="time" 
+                  <label htmlFor="time" className="form-label">
+                    Time
+                  </label>
+                  <input
+                    type="time"
                     className="form-control"
                     id="time"
                     value={appointmentTime}
@@ -516,8 +578,10 @@ const PatientDashboard = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="reason" className="form-label">Reason for Visit</label>
-                  <textarea 
+                  <label htmlFor="reason" className="form-label">
+                    Reason for Visit
+                  </label>
+                  <textarea
                     className="form-control"
                     id="reason"
                     rows="3"
@@ -527,8 +591,8 @@ const PatientDashboard = () => {
                   ></textarea>
                 </div>
                 <div className="d-flex justify-content-end">
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="btn btn-secondary me-2"
                     onClick={() => setShowAppointmentModal(false)}
                   >
