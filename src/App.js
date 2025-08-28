@@ -7,6 +7,8 @@ import PatientDashboard from "./patientdashboard";
 import GoToAnother from "./go-as";
 import MakeAppointment from './appointments';
 import DoctorDashboard from './doctor.dash';
+import AdminLogin from './admin.login';
+import AdminDashboard from './admin.dashboard';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="/continue-as" element={<GoToAnother/>}/>
           <Route path="/appointment" element={<MakeAppointment/>}/>
           <Route path="/doctor" element={<DoctorDashboard/>}/>
+          <Route path="/admin/login" element={<AdminLogin/>}/>
+          <Route path="/admin" element={<AdminDashboard/>}/>
         </Routes>
       </BrowserRouter>
     </>
