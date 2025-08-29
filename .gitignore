@@ -28,3 +28,9 @@ yarn-error.log*
 # Docker
 ssl/
 logs/
+
+# Sensitive files
+*.key
+*.pem
+*.p12
+*.pfx
