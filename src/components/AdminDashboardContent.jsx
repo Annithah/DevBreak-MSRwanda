@@ -3,6 +3,9 @@ import { useAdmin } from '../context/AdminContext';
 import AdminAnalytics from './AdminAnalytics';
 import UserManagement from './UserManagement';
 import PermissionsManager from './PermissionsManager';
+import SystemMonitoring from './SystemMonitoring';
+import ReportsGeneration from './ReportsGeneration';
+import BackupRestore from './BackupRestore';
 
 const AdminDashboardContent = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -49,6 +52,21 @@ const AdminDashboardContent = () => {
              onClick={() => setActiveTab('permissions')}>
           <i className="fas fa-shield-alt"></i>
           <span>Permissions</span>
+        </div>
+        <div className={`menu-item ${activeTab === 'monitoring' ? 'active' : ''}`}
+             onClick={() => setActiveTab('monitoring')}>
+          <i className="fas fa-desktop"></i>
+          <span>System Monitor</span>
+        </div>
+        <div className={`menu-item ${activeTab === 'reports' ? 'active' : ''}`}
+             onClick={() => setActiveTab('reports')}>
+          <i className="fas fa-file-alt"></i>
+          <span>Reports</span>
+        </div>
+        <div className={`menu-item ${activeTab === 'backup' ? 'active' : ''}`}
+             onClick={() => setActiveTab('backup')}>
+          <i className="fas fa-database"></i>
+          <span>Backup</span>
         </div>
         <div className={`menu-item ${activeTab === 'settings' ? 'active' : ''}`}
              onClick={() => setActiveTab('settings')}>
@@ -131,6 +149,21 @@ const AdminDashboardContent = () => {
         {/* Permissions Tab */}
         {activeTab === 'permissions' && (
           <PermissionsManager />
+        )}
+
+        {/* System Monitoring Tab */}
+        {activeTab === 'monitoring' && (
+          <SystemMonitoring />
+        )}
+
+        {/* Reports Tab */}
+        {activeTab === 'reports' && (
+          <ReportsGeneration />
+        )}
+
+        {/* Backup Tab */}
+        {activeTab === 'backup' && (
+          <BackupRestore />
         )}
 
         {/* Settings Tab */}

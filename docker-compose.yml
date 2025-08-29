@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: medihub-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: medihub2024
+      MONGO_INITDB_DATABASE: medihub
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - medihub-network
+
+  backend:
+    build: .
+    container_name: medihub-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      MONGODB_URI: mongodb://admin:medihub2024@mongodb:27017/medihub?authSource=admin
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      GEMINI_API_KEY: your-gemini-api-key
+      PORT: 5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    networks:
+      - medihub-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: medihub-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - backend
+    networks:
+      - medihub-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  medihub-network:
+    driver: bridge
