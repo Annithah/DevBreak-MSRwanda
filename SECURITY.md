@@ -4,7 +4,7 @@
 
 **IMPORTANT**: The following sensitive information was accidentally committed to the repository:
 
-- `GEMINI_API_KEY`: AIzaSyCjX-hx7Ppjwphw2OlboC75uLrposcLs4A
+- `GEMINI_API_KEY`: [REDACTED - Key was exposed and needs regeneration]
 - `JWT_SECRET`: medihub-secret-key-2024
 
 ## 🚨 Immediate Actions Required
